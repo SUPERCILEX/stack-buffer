@@ -1,0 +1,10 @@
+[package]
+name = "stack-buffer"
+version = "0.1.0"
+authors = ["Alex Saveau <saveau.alexandre@gmail.com>"]
+edition = "2021"
+description = "Stack buffer provides alternatives to BufReader and BufWriter allocated on the stack instead of the heap."
+repository = "https://github.com/SUPERCILEX/stack-buffer"
+keywords = ["buf", "buffer", "stack"]
+categories = ["caching", "data-structures", "memory-management"]
+license = "Apache-2.0"
