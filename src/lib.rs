@@ -3,5 +3,7 @@
 #![feature(can_vector)]
 
 mod bufreader;
+mod bufwriter;
 
 pub use bufreader::StackBufReader;
+pub use bufwriter::StackBufWriter;
