@@ -310,12 +310,16 @@ impl<W: Write, const N: usize> StackBufWriter<W, N> {
         }
     }
 
+    // SAFETY: Requires `buf.len() <= self.buf.capacity() - self.buf.len()`,
+    // i.e., that input buffer length is less than or equal to spare capacity.
     #[inline]
     unsafe fn write_to_buffer_unchecked(&mut self, buf: &[u8]) {
         debug_assert!(buf.len() <= self.spare_capacity());
         let buf_len = buf.len();
         let src = buf.as_ptr();
-        let dst = MaybeUninit::slice_assume_init_mut(&mut self.buf[self.end..]).as_mut_ptr();
+        let dst = MaybeUninit::slice_assume_init_mut(&mut self.buf)
+            .as_mut_ptr()
+            .add(self.end);
         ptr::copy_nonoverlapping(src, dst, buf_len);
         self.end += buf_len;
     }
