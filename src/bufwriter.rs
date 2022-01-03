@@ -33,7 +33,7 @@ use std::{
 /// use std::net::TcpStream;
 /// use stack_buffer::StackBufWriter;
 ///
-/// let mut stream = StackBufWriter::<_, 4096>::new(TcpStream::connect("127.0.0.1:34254").unwrap());
+/// let mut stream = StackBufWriter::<_, 8192>::new(TcpStream::connect("127.0.0.1:34254").unwrap());
 ///
 /// for i in 0..10 {
 ///     stream.write(&[i+1]).unwrap();
@@ -66,7 +66,7 @@ impl<W: Write, const N: usize> StackBufWriter<W, N> {
     /// use std::net::TcpStream;
     /// use stack_buffer::StackBufWriter;
     ///
-    /// let mut buffer = StackBufWriter::<_, 4096>::new(TcpStream::connect("127.0.0.1:34254").unwrap());
+    /// let mut buffer = StackBufWriter::<_, 8192>::new(TcpStream::connect("127.0.0.1:34254").unwrap());
     /// ```
     pub fn new(inner: W) -> StackBufWriter<W, N> {
         StackBufWriter {
@@ -167,7 +167,7 @@ impl<W: Write, const N: usize> StackBufWriter<W, N> {
     /// use std::net::TcpStream;
     /// use stack_buffer::StackBufWriter;
     ///
-    /// let mut buffer = StackBufWriter::<_, 4096>::new(TcpStream::connect("127.0.0.1:34254").unwrap());
+    /// let mut buffer = StackBufWriter::<_, 8192>::new(TcpStream::connect("127.0.0.1:34254").unwrap());
     ///
     /// // we can use reference just like buffer
     /// let reference = buffer.get_ref();
@@ -186,7 +186,7 @@ impl<W: Write, const N: usize> StackBufWriter<W, N> {
     /// use std::net::TcpStream;
     /// use stack_buffer::StackBufWriter;
     ///
-    /// let mut buffer = StackBufWriter::<_, 4096>::new(TcpStream::connect("127.0.0.1:34254").unwrap());
+    /// let mut buffer = StackBufWriter::<_, 8192>::new(TcpStream::connect("127.0.0.1:34254").unwrap());
     ///
     /// // we can use reference just like buffer
     /// let reference = buffer.get_mut();
@@ -203,7 +203,7 @@ impl<W: Write, const N: usize> StackBufWriter<W, N> {
     /// use std::net::TcpStream;
     /// use stack_buffer::StackBufWriter;
     ///
-    /// let buf_writer = StackBufWriter::<_, 4096>::new(TcpStream::connect("127.0.0.1:34254").unwrap());
+    /// let buf_writer = StackBufWriter::<_, 8192>::new(TcpStream::connect("127.0.0.1:34254").unwrap());
     ///
     /// // See how many bytes are currently buffered
     /// let bytes_buffered = buf_writer.buffer().len();
@@ -220,7 +220,7 @@ impl<W: Write, const N: usize> StackBufWriter<W, N> {
     /// use std::net::TcpStream;
     /// use stack_buffer::StackBufWriter;
     ///
-    /// let buf_writer = StackBufWriter::<_, 4096>::new(TcpStream::connect("127.0.0.1:34254").unwrap());
+    /// let buf_writer = StackBufWriter::<_, 8192>::new(TcpStream::connect("127.0.0.1:34254").unwrap());
     ///
     /// // Check the capacity of the inner buffer
     /// let capacity = buf_writer.capacity();
