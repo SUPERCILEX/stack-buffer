@@ -7,7 +7,9 @@ use std::{
     slice,
 };
 
-use criterion::{criterion_group, criterion_main, BatchSize, BenchmarkId, Criterion, Throughput};
+use criterion::{
+    black_box, criterion_group, criterion_main, BatchSize, BenchmarkId, Criterion, Throughput,
+};
 use rand::{thread_rng, RngCore};
 
 use stack_buffer::{StackBufReader, StackBufWriter};
@@ -25,7 +27,8 @@ fn buf_reader(c: &mut Criterion) {
                     &data,
                     |b, data| {
                         b.iter(|| {
-                            let reader = StackBufReader::<_, $alloc>::new(data.as_slice());
+                            let reader =
+                                StackBufReader::<_, $alloc>::new(black_box(data.as_slice()));
                             for (i, byte) in reader.bytes().enumerate() {
                                 assert_eq!(byte.unwrap(), data[i]);
                             }
@@ -42,7 +45,8 @@ fn buf_reader(c: &mut Criterion) {
                     &data,
                     |b, data| {
                         b.iter(|| {
-                            let reader = BufReader::with_capacity($alloc, data.as_slice());
+                            let reader =
+                                BufReader::with_capacity($alloc, black_box(data.as_slice()));
                             for (i, byte) in reader.bytes().enumerate() {
                                 assert_eq!(byte.unwrap(), data[i]);
                             }
@@ -82,10 +86,11 @@ fn buf_writer(c: &mut Criterion) {
                             || create_uninit_vec(num_bytes as usize),
                             |output| {
                                 {
-                                    let mut writer =
-                                        StackBufWriter::<_, $alloc>::new(output.as_mut_slice());
+                                    let mut writer = StackBufWriter::<_, $alloc>::new(black_box(
+                                        output.as_mut_slice(),
+                                    ));
                                     for byte in data {
-                                        writer.write_all(slice::from_ref(byte)).unwrap();
+                                        writer.write_all(black_box(slice::from_ref(byte))).unwrap();
                                     }
                                     writer.flush().unwrap();
                                 }
@@ -109,10 +114,12 @@ fn buf_writer(c: &mut Criterion) {
                             || create_uninit_vec(num_bytes as usize),
                             |output| {
                                 {
-                                    let mut writer =
-                                        BufWriter::with_capacity($alloc, output.as_mut_slice());
+                                    let mut writer = BufWriter::with_capacity(
+                                        $alloc,
+                                        black_box(output.as_mut_slice()),
+                                    );
                                     for byte in data {
-                                        writer.write_all(slice::from_ref(byte)).unwrap();
+                                        writer.write_all(black_box(slice::from_ref(byte))).unwrap();
                                     }
                                     writer.flush().unwrap();
                                 }
