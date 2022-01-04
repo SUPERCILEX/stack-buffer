@@ -6,7 +6,14 @@ to use the stack.
 
 ## Usage
 
-The nightly compiler is required.
+> The nightly compiler is required.
+
+Add the following to your `Cargo.toml` file:
+
+```toml
+[dependencies]
+stack-buffer = "0.1.0"
+```
 
 Replace `Buf{Reader,Writer}::{new,with_capacity}` with `StackBuf{Reader,Writer}::<_, N>::new`
 where `N` is the allocated size on the stack.
