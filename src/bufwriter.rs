@@ -468,7 +468,7 @@ where
             .field("writer", &self.inner)
             .field(
                 "buffer",
-                &format_args!("{}/{}", self.end - self.start, self.spare_capacity()),
+                &format_args!("{}/{}", self.end - self.start, self.buf.len()),
             )
             .finish()
     }
