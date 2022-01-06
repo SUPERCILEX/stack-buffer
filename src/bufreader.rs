@@ -26,7 +26,7 @@ use std::{
 ///     Ok(())
 /// }
 /// ```
-pub struct StackBufReader<R, const N: usize> {
+pub struct StackBufReader<R, const N: usize = 4096> {
     inner: R,
     buf: [MaybeUninit<u8>; N],
     pos: usize,

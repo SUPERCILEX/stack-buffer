@@ -46,7 +46,7 @@ use std::{
 /// the `stream` is flushed.
 ///
 /// [`TcpStream`]: crate::net::TcpStream
-pub struct StackBufWriter<W: Write, const N: usize> {
+pub struct StackBufWriter<W: Write, const N: usize = 8192> {
     inner: W,
     buf: [MaybeUninit<u8>; N],
     start: usize,
