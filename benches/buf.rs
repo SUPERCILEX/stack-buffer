@@ -8,7 +8,8 @@ use std::{
 };
 
 use criterion::{
-    black_box, criterion_group, criterion_main, BatchSize, BenchmarkId, Criterion, Throughput,
+    black_box, criterion_group, criterion_main, AxisScale, BatchSize, BenchmarkId, Criterion,
+    PlotConfiguration, Throughput,
 };
 use rand::{thread_rng, RngCore};
 
@@ -16,6 +17,7 @@ use stack_buffer::{StackBufReader, StackBufWriter};
 
 fn buf_reader(c: &mut Criterion) {
     let mut group = c.benchmark_group("buf_reader");
+    group.plot_config(PlotConfiguration::default().summary_scale(AxisScale::Logarithmic));
 
     for num_bytes in [10, 1_000, 10_000, 100_000, 1_000_000, 10_000_000] {
         let data = gen_random_bytes(num_bytes);
@@ -72,6 +74,7 @@ fn buf_reader(c: &mut Criterion) {
 
 fn buf_writer(c: &mut Criterion) {
     let mut group = c.benchmark_group("buf_writer");
+    group.plot_config(PlotConfiguration::default().summary_scale(AxisScale::Logarithmic));
 
     for num_bytes in [10, 1_000, 10_000, 100_000, 1_000_000, 10_000_000] {
         let data = gen_random_bytes(num_bytes);
