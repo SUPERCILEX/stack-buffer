@@ -1,6 +1,7 @@
 use std::{
     fmt, io,
     io::{Error, ErrorKind, IoSlice, Seek, SeekFrom, Write},
+    mem,
     mem::MaybeUninit,
     ptr,
 };
@@ -229,6 +230,38 @@ impl<W: Write, const N: usize> StackBufWriter<W, N> {
     /// ```
     pub fn capacity(&self) -> usize {
         self.buf.len()
+    }
+
+    /// Unwraps this `StackBufWriter<W, N>`, returning the underlying writer.
+    ///
+    /// The buffer is written out before returning the writer.
+    ///
+    /// # Errors
+    ///
+    /// An [`Err`] will be returned if an error occurs while flushing the buffer.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use std::net::TcpStream;
+    /// use stack_buffer::StackBufWriter;
+    ///
+    /// let mut buffer = StackBufWriter::<_, 8192>::new(TcpStream::connect("127.0.0.1:34254").unwrap());
+    ///
+    /// // unwrap the TcpStream and flush the buffer
+    /// let stream = buffer.into_inner().unwrap();
+    /// ```
+    pub fn into_inner(mut self) -> Result<W, (io::Error, StackBufWriter<W, N>)> {
+        match self.flush_buf() {
+            Err(e) => Err((e, self)),
+            Ok(()) => {
+                // SAFETY: forget(self) prevents double dropping inner
+                let inner = unsafe { ptr::read(&self.inner) };
+                mem::forget(self);
+
+                Ok(inner)
+            }
+        }
     }
 
     // Ensure this function does not get inlined into `write`, so that it
