@@ -1,4 +1,3 @@
-#![feature(vec_spare_capacity)]
 #![feature(maybe_uninit_slice)]
 
 use std::{
@@ -61,10 +60,12 @@ fn buf_reader(c: &mut Criterion) {
         group.throughput(Throughput::Elements(num_bytes));
 
         stack_bench!(512);
+        stack_bench!(2048);
         stack_bench!(4096);
         stack_bench!(8192);
         stack_bench!(65536);
 
+        heap_bench!(2048);
         heap_bench!(512);
         heap_bench!(4096);
         heap_bench!(8192);
@@ -139,11 +140,13 @@ fn buf_writer(c: &mut Criterion) {
         group.throughput(Throughput::Elements(num_bytes));
 
         stack_bench!(512);
+        stack_bench!(2048);
         stack_bench!(4096);
         stack_bench!(8192);
         stack_bench!(65536);
 
         heap_bench!(512);
+        heap_bench!(2048);
         heap_bench!(4096);
         heap_bench!(8192);
         heap_bench!(65536);
