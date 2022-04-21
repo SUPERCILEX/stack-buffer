@@ -52,7 +52,7 @@ impl<R: Read, const N: usize> StackBufReader<R, N> {
     pub fn new(inner: R) -> StackBufReader<R, N> {
         StackBufReader {
             inner,
-            buf: unsafe { MaybeUninit::uninit().assume_init() },
+            buf: MaybeUninit::uninit_array(),
             pos: 0,
             cap: 0,
             init: 0,

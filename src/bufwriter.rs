@@ -72,7 +72,7 @@ impl<W: Write, const N: usize> StackBufWriter<W, N> {
     pub fn new(inner: W) -> StackBufWriter<W, N> {
         StackBufWriter {
             inner,
-            buf: unsafe { MaybeUninit::uninit().assume_init() },
+            buf: MaybeUninit::uninit_array(),
             start: 0,
             end: 0,
             panicked: false,
